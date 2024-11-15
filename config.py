@@ -21,4 +21,12 @@ TORTOISE_ORM = {
     },
 }
 
+EMIAL_CONFIG = {
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "sender": "xy913741894@gmail.com",
+    "password": "zqfhttdozlvagrlt",
+    "receiver": "xy913741894@qq.com",
+}
+
 URL = "https://api.binance.com/api/v3/exchangeInfo"

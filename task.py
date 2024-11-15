@@ -1,6 +1,7 @@
+from re import L
 import httpx
 from typing import List
-import json
+import smtplib
 
 from config import LOGGER, URL
 from model import Symbol
@@ -38,5 +39,13 @@ async def monitor_exchange_api():
     if not exchange_info or len(exchange_info) == 0:
         LOGGER.info("exchange info is empty")
         return
-    
     LOGGER.info(f"exchange info size: {len(exchange_info)}")
+
+    notify_list = []
+    for s in exchange_info:
+        if s.symbol not in symbol_set:
+            await s.save()
+            notify_list.append(s)
+
+    if len(notify_list) > 0:
+        LOGGER.info(f"notify list size: {len(notify_list)}")

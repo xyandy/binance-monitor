@@ -5,6 +5,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 from contextlib import asynccontextmanager
 from tortoise import Tortoise
+
 # local dependency
 from config import LOGGER, PORT, TORTOISE_ORM
 from task import monitor_exchange_api
@@ -41,8 +42,8 @@ async def get_symbols() -> List[dict]:
         return [
             {
                 "symbol": s.symbol,
-                "baseAsset": s.baseAsset,
-                "quoteAsset": s.quoteAsset,
+                "baseAsset": s.base_asset,
+                "quoteAsset": s.quote_asset,
                 "status": s.status,
             }
             for s in symbols
@@ -56,7 +57,7 @@ async def get_symbols() -> List[dict]:
 @app.get("/tokens")
 async def get_tokens() -> List[str]:
     symbols = await Symbol.all()
-    unique_tokens = set(s.baseAsset for s in symbols)
+    unique_tokens = set(s.base_asset for s in symbols)
     return list(unique_tokens)
 
 
