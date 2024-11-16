@@ -25,7 +25,7 @@ EMIAL_CONFIG = {
     "host": "smtp.gmail.com",
     "port": 587,
     "sender": "xy913741894@gmail.com",
-    "password": "zqfhttdozlvagrlt",
+    "password": "cpbhlrkhziqejewx",
     "receiver": "xy913741894@qq.com",
 }
 

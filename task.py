@@ -1,10 +1,10 @@
-from re import L
+import json
 import httpx
 from typing import List
-import smtplib
 
 from config import LOGGER, URL
 from model import Symbol
+from util import send_email
 
 
 async def get_exchange_info(url: str, timeout: float = 30.0) -> List[Symbol]:
@@ -48,4 +48,14 @@ async def monitor_exchange_api():
             notify_list.append(s)
 
     if len(notify_list) > 0:
-        LOGGER.info(f"notify list size: {len(notify_list)}")
+        symbol_dicts = [
+            {
+                "symbol": s.symbol,
+                "baseAsset": s.base_asset,
+                "quoteAsset": s.quote_asset,
+                "status": s.status
+            } for s in notify_list
+        ]
+        content = json.dumps(symbol_dicts, indent=2)
+        send_email(f"binance add new api", content)
+        LOGGER.info(f"notify list: {content}")

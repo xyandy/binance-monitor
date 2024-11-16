@@ -45,6 +45,7 @@ async def get_symbols(symbol: str | None = None) -> List[dict]:
 
         return [
             {
+                "id": s.id,
                 "symbol": s.symbol,
                 "baseAsset": s.base_asset,
                 "quoteAsset": s.quote_asset,
