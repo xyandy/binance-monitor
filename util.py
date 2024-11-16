@@ -36,14 +36,10 @@ def extract_announcements(data: Dict[str, List[Dict]]):
         href = item["href"]
         text = item["text"]
         if "/en/support/announcement/" in href and re.search(date_pattern, text):
-            # 提取日期并添加到结果中
             date_match = re.search(date_pattern, text)
             time_str = date_match.group(0) if date_match else None
-            announcements.append({
-                "href": href, 
-                "text": text,
-                "time": time_str
-            })
+            announcements.append({"href": href, "text": text, "time": time_str})
+    print(json.dumps(announcements, indent=2))
     return announcements
 
 
