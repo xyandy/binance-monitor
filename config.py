@@ -29,4 +29,5 @@ EMIAL_CONFIG = {
     "receiver": "xy913741894@qq.com",
 }
 
-URL = "https://api.binance.com/api/v3/exchangeInfo"
+EXCHANGE_API_URL = "https://api.binance.com/api/v3/exchangeInfo"
+ANNOUNCEMENT_URL = "https://www.binance.com/en/support/announcement/new-cryptocurrency-listing?c=48&navId=48"
