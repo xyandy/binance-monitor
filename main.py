@@ -36,9 +36,13 @@ app = FastAPI(title="binance-monitor", lifespan=lifespan)
 
 
 @app.get("/symbols")
-async def get_symbols() -> List[dict]:
+async def get_symbols(symbol: str | None = None) -> List[dict]:
     try:
-        symbols = await Symbol.all()
+        if symbol:
+            symbols = await Symbol.filter(symbol=symbol)
+        else:
+            symbols = await Symbol.all()
+
         return [
             {
                 "symbol": s.symbol,
@@ -50,6 +54,21 @@ async def get_symbols() -> List[dict]:
         ]
     except Exception as e:
         message = f"fail to get symbols: {str(e)}"
+        LOGGER.error(message)
+        raise HTTPException(status_code=500, detail=message)
+
+
+@app.delete("/symbols/{symbol}")
+async def delete_symbol(symbol: str) -> dict:
+    try:
+        symbol_obj = await Symbol.get_or_none(symbol=symbol)
+        if not symbol_obj:
+            raise HTTPException(status_code=404, detail=f"Symbol {symbol} not found")
+
+        await symbol_obj.delete()
+        return {"message": f"Symbol {symbol} deleted successfully"}
+    except Exception as e:
+        message = f"fail to delete symbol {symbol}: {str(e)}"
         LOGGER.error(message)
         raise HTTPException(status_code=500, detail=message)
 
