@@ -7,7 +7,7 @@ from crawl4ai import AsyncWebCrawler
 
 from config import LOGGER, EXCHANGE_API_URL, ANNOUNCEMENT_URL
 from model import Symbol
-from util import send_email
+from util import send_email, extract_announcements
 
 
 async def get_exchange_info(url: str, timeout: float = 30.0) -> List[Symbol]:
@@ -34,16 +34,13 @@ async def get_exchange_info(url: str, timeout: float = 30.0) -> List[Symbol]:
 
 
 async def monitor_announcement():
-    timeout = 60
+    timeout = 30000
     async with AsyncWebCrawler() as crawler:
         page = await crawler.arun(url=ANNOUNCEMENT_URL, page_timeout=timeout)
         if not page:
             LOGGER.error("fail to get announcement page")
-        markdown = page.markdown
-        links = page.links
-        print(f"links: {links}")
-        print(f"markdown: {markdown}")
-        pass
+        filteredLinks = extract_announcements(page.links)
+        return filteredLinks
 
 
 async def monitor_exchange_api():
