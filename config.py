@@ -25,6 +25,7 @@ EMIAL_CONFIG = {
     "host": "smtp.gmail.com",
     "port": 587,
     "sender": "xy913741894@gmail.com",
+    "sender_name": "binance-monitor",
     "password": "cpbhlrkhziqejewx",
     "receiver": "xy913741894@qq.com",
 }

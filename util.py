@@ -3,6 +3,7 @@ import hashlib
 import base64
 from email.mime.text import MIMEText
 from email.header import Header
+from email.utils import formataddr
 from typing import Dict, List
 import json
 import re
@@ -16,7 +17,7 @@ def send_email(subject, content):
     password = EMIAL_CONFIG["password"]
 
     message = MIMEText(content, "plain", "utf-8")
-    message["From"] = Header(sender)
+    message["From"] = formataddr((EMIAL_CONFIG["sender_name"], EMIAL_CONFIG["sender"]))
     message["To"] = Header(receiver)
     message["Subject"] = Header(subject)
 
@@ -58,7 +59,8 @@ def url_to_hash(url):
 if __name__ == "__main__":
     subject = "测试邮件"
     content = "这是一封测试邮件的内容"
-    send_email(subject, content)
+    # send_email(subject, content)
+    print(formataddr(("xxx", "123@qq.com")))
 
     # with open("tmp/tmp.json", "r", encoding="utf-8") as f:
     #     data = json.load(f)
