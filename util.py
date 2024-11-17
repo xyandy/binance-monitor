@@ -41,7 +41,7 @@ def extract_announcements(data: Dict[str, List[Dict]]):
             date_match = re.search(date_pattern, text)
             time_str = date_match.group(0) if date_match else None
             announcements.append({"href": href, "text": text, "time": time_str})
-    print(json.dumps(announcements, indent=2))
+    # print(json.dumps(announcements, indent=2))
     return announcements
 
 
