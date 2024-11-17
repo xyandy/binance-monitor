@@ -1,4 +1,6 @@
 import smtplib
+import hashlib
+import base64
 from email.mime.text import MIMEText
 from email.header import Header
 from typing import Dict, List
@@ -43,20 +45,29 @@ def extract_announcements(data: Dict[str, List[Dict]]):
     return announcements
 
 
+def url_to_hash(url):
+    hash_object = hashlib.sha256(url.encode())
+    hash_digest = hash_object.digest()
+
+    truncated_digest = hash_digest[:32]
+    hash_string = base64.urlsafe_b64encode(truncated_digest).decode().rstrip("=")
+
+    return hash_string
+
+
 if __name__ == "__main__":
     subject = "测试邮件"
     content = "这是一封测试邮件的内容"
     send_email(subject, content)
 
-    # 读取JSON数据
-    with open("tmp/tmp.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
+    # with open("tmp/tmp.json", "r", encoding="utf-8") as f:
+    #     data = json.load(f)
 
-    # 提取公告
-    announcements = extract_announcements(data)
+    # # 提取公告
+    # announcements = extract_announcements(data)
 
-    # 打印结果
-    for announcement in announcements:
-        print(f"标题: {announcement['text']}")
-        print(f"链接: {announcement['href']}")
-        print("-" * 80)
+    # # 打印结果
+    # for announcement in announcements:
+    #     print(f"标题: {announcement['text']}")
+    #     print(f"链接: {announcement['href']}")
+    #     print("-" * 80)

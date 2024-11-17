@@ -2,12 +2,13 @@ import json
 import httpx
 import asyncio
 from typing import List
+from datetime import datetime
 from crawl4ai import AsyncWebCrawler
 
 
 from config import LOGGER, EXCHANGE_API_URL, ANNOUNCEMENT_URL
-from model import Symbol
-from util import send_email, extract_announcements
+from model import Symbol, Announcement
+from util import send_email, extract_announcements, url_to_hash
 
 
 async def get_exchange_info(url: str, timeout: float = 30.0) -> List[Symbol]:
@@ -31,16 +32,6 @@ async def get_exchange_info(url: str, timeout: float = 30.0) -> List[Symbol]:
         message = f"fail to exchange info: {str(e)}"
         LOGGER.error(message)
         return []
-
-
-async def monitor_announcement():
-    timeout = 30000
-    async with AsyncWebCrawler() as crawler:
-        page = await crawler.arun(url=ANNOUNCEMENT_URL, page_timeout=timeout)
-        if not page:
-            LOGGER.error("fail to get announcement page")
-        filteredLinks = extract_announcements(page.links)
-        return filteredLinks
 
 
 async def monitor_exchange_api():
@@ -71,9 +62,53 @@ async def monitor_exchange_api():
             for s in notify_list
         ]
         content = json.dumps(symbol_dicts, indent=2)
-        send_email(f"binance add new api", content)
+        send_email(f"binance add new token", content)
+        LOGGER.info(f"notify list: {content}")
+
+
+async def get_announcement(url: str, timeout: float = 30000):
+    try:
+        async with AsyncWebCrawler() as crawler:
+            page = await crawler.arun(url=url, page_timeout=timeout)
+            if not page:
+                raise Exception("page is null")
+            filteredLinks = extract_announcements(page.links)
+            return filteredLinks
+    except Exception as e:
+        message = f"fail to get announcement: {str(e)}"
+        LOGGER.error(message)
+        return []
+
+
+async def monitor_announcement():
+    db_announcements = await Announcement.all()
+    announcement_set = set(a.url_hash for a in db_announcements)
+    LOGGER.info(f"db announcement size: {len(announcement_set)}")
+
+    announcements = await get_announcement(ANNOUNCEMENT_URL)
+    if not announcements or len(announcements) == 0:
+        LOGGER.info("announcement is empty")
+        return
+    LOGGER.info(f"announcement size: {len(announcements)}")
+
+    notify_list = []
+    for a in announcements:
+        url_hash = url_to_hash(a["href"])
+        if url_hash not in announcement_set:
+            date_obj = datetime.strptime(a["time"], '%Y-%m-%d').date()
+            await Announcement.create(
+                title=a["text"],
+                url=a["href"],
+                url_hash=url_hash,
+                time=date_obj,
+            )
+            notify_list.append(a)
+
+    if len(notify_list) > 0:
+        content = json.dumps(notify_list, indent=2)
+        send_email(f"binance add new announcement", content)
         LOGGER.info(f"notify list: {content}")
 
 
 if __name__ == "__main__":
-    asyncio.run(monitor_announcement())
+    asyncio.run(get_announcement())

@@ -8,8 +8,8 @@ from tortoise import Tortoise
 
 # local dependency
 from config import LOGGER, PORT, TORTOISE_ORM
-from task import monitor_exchange_api
-from model import Symbol
+from task import monitor_exchange_api, monitor_announcement
+from model import Symbol, Announcement
 
 scheduler = AsyncIOScheduler()
 
@@ -22,7 +22,20 @@ async def lifespan(app: FastAPI):
     LOGGER.info("Sqlite connected")
     # add cronjob
     scheduler.add_job(
-        monitor_exchange_api, "interval", minutes=1, max_instances=1, coalesce=True
+        monitor_exchange_api,
+        "interval",
+        minutes=2,
+        max_instances=1,
+        coalesce=True,
+        next_run_time=datetime.now(),
+    )
+    scheduler.add_job(
+        monitor_announcement,
+        "interval",
+        minutes=2,
+        max_instances=1,
+        coalesce=True,
+        next_run_time=datetime.now(),
     )
     scheduler.start()
 
@@ -42,17 +55,7 @@ async def get_symbols(symbol: str | None = None) -> List[dict]:
             symbols = await Symbol.filter(symbol=symbol)
         else:
             symbols = await Symbol.all()
-
-        return [
-            {
-                "id": s.id,
-                "symbol": s.symbol,
-                "baseAsset": s.base_asset,
-                "quoteAsset": s.quote_asset,
-                "status": s.status,
-            }
-            for s in symbols
-        ]
+        return [s.to_dict() for s in symbols]
     except Exception as e:
         message = f"fail to get symbols: {str(e)}"
         LOGGER.error(message)
@@ -79,6 +82,12 @@ async def get_tokens() -> List[str]:
     symbols = await Symbol.all()
     unique_tokens = set(s.base_asset for s in symbols)
     return list(unique_tokens)
+
+
+@app.get("/√")
+async def get_announcements():
+    announcements = await Announcement.all().order_by("-time")
+    return [a.to_dict() for a in announcements]
 
 
 if __name__ == "__main__":
