@@ -57,10 +57,11 @@ def url_to_hash(url):
 
 
 if __name__ == "__main__":
-    subject = "测试邮件"
-    content = "这是一封测试邮件的内容"
+    pass
+    # subject = "测试邮件"
+    # content = "这是一封测试邮件的内容"
     # send_email(subject, content)
-    print(formataddr(("xxx", "123@qq.com")))
+    # print(formataddr(("xxx", "123@qq.com")))
 
     # with open("tmp/tmp.json", "r", encoding="utf-8") as f:
     #     data = json.load(f)

@@ -66,10 +66,19 @@ async def monitor_exchange_api():
         LOGGER.info(f"notify list: {content}")
 
 
-async def get_announcement(url: str, timeout: float = 30000):
+async def get_announcement(url: str, timeout: float = 60000):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    }
     try:
         async with AsyncWebCrawler() as crawler:
-            page = await crawler.arun(url=url, page_timeout=timeout)
+            page = await crawler.arun(
+                url=url, 
+                headers=headers, 
+                page_timeout=timeout,
+                wait_until='networkidle',
+                wait_time=5000  # 额外等待5秒确保动态内容加载
+            )
             if not page:
                 raise Exception("page is null")
             filteredLinks = extract_announcements(page.links)
@@ -111,4 +120,4 @@ async def monitor_announcement():
 
 
 if __name__ == "__main__":
-    asyncio.run(get_announcement())
+    asyncio.run(get_announcement(ANNOUNCEMENT_URL))

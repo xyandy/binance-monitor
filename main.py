@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     scheduler.add_job(
         monitor_exchange_api,
         "interval",
-        minutes=1,
+        minutes=2,
         max_instances=1,
         coalesce=True,
         next_run_time=datetime.now(),
@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
     scheduler.add_job(
         monitor_announcement,
         "interval",
-        minutes=1,
+        minutes=2,
         max_instances=1,
         coalesce=True,
         next_run_time=datetime.now(),
