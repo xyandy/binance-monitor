@@ -126,17 +126,16 @@ async def get_announcement(url: str, timeout: float = 60000):
     ]
     proxy = choice(proxies)
     proxy_config = {
-        "proxy": proxy["proxy"],
+        "server": proxy["proxy"],
         "username": proxy["username"],
         "password": proxy["password"],
     }
 
     try:
-        async with AsyncWebCrawler() as crawler:
+        async with AsyncWebCrawler(proxy_config=proxy_config) as crawler:
             page = await crawler.arun(
                 url=url,
                 headers=headers,
-                proxy=proxy_config,  # 添加代理配置
                 page_timeout=timeout,
                 wait_until="networkidle",
                 wait_time=5000,
