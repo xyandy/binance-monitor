@@ -1,0 +1,10 @@
+198.23.239.134:6540:tmwyubph:7esnvu6mjsvz
+207.244.217.165:6712:tmwyubph:7esnvu6mjsvz
+107.172.163.27:6543:tmwyubph:7esnvu6mjsvz
+64.137.42.112:5157:tmwyubph:7esnvu6mjsvz
+173.211.0.148:6641:tmwyubph:7esnvu6mjsvz
+161.123.152.115:6360:tmwyubph:7esnvu6mjsvz
+167.160.180.203:6754:tmwyubph:7esnvu6mjsvz
+154.36.110.199:6853:tmwyubph:7esnvu6mjsvz
+173.0.9.70:5653:tmwyubph:7esnvu6mjsvz
+173.0.9.209:5792:tmwyubph:7esnvu6mjsvz

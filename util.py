@@ -55,8 +55,26 @@ def url_to_hash(url):
 
     return hash_string
 
+def parse_proxy_file(filepath: str) -> list:
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+            proxies = []
+            for line in content.strip().split('\n'):
+                if line:
+                    ip, port, username, password = line.strip().split(':')
+                    proxies.append({
+                        'proxy': f'http://{ip}:{port}',
+                        'username': username,
+                        'password': password
+                    })
+            return proxies
+    except Exception as e:
+        print(f"fail to read proxy text: {str(e)}")
+        return []
 
 if __name__ == "__main__":
+    print(parse_proxy_file("./proxies.txt"))
     pass
     # subject = "测试邮件"
     # content = "这是一封测试邮件的内容"

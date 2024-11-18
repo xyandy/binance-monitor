@@ -8,7 +8,8 @@ from crawl4ai import AsyncWebCrawler
 
 from config import LOGGER, EXCHANGE_API_URL, ANNOUNCEMENT_URL
 from model import Symbol, Announcement
-from util import send_email, extract_announcements, url_to_hash
+from util import send_email, extract_announcements, url_to_hash, parse_proxy_file
+from random import choice
 
 
 async def get_exchange_info(url: str, timeout: float = 30.0) -> List[Symbol]:
@@ -70,14 +71,29 @@ async def get_announcement(url: str, timeout: float = 60000):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     }
+    
+    # 读取并随机选择一个代理
+    proxies = parse_proxy_file("./proxies.txt")
+    if not proxies:
+        LOGGER.warning("No proxies available, will proceed without proxy")
+        proxy_config = None
+    else:
+        proxy = choice(proxies)
+        proxy_config = {
+            "proxy": proxy["proxy"],
+            "username": proxy["username"],
+            "password": proxy["password"]
+        }
+    
     try:
         async with AsyncWebCrawler() as crawler:
             page = await crawler.arun(
                 url=url, 
                 headers=headers, 
+                proxy=proxy_config,  # 添加代理配置
                 page_timeout=timeout,
                 wait_until='networkidle',
-                wait_time=5000  # 额外等待5秒确保动态内容加载
+                wait_time=5000
             )
             if not page:
                 raise Exception("page is null")
