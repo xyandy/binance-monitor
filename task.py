@@ -69,31 +69,77 @@ async def monitor_exchange_api():
 
 async def get_announcement(url: str, timeout: float = 60000):
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
-    
     # 读取并随机选择一个代理
-    proxies = parse_proxy_file("./proxies.txt")
-    if not proxies:
-        LOGGER.warning("No proxies available, will proceed without proxy")
-        proxy_config = None
-    else:
-        proxy = choice(proxies)
-        proxy_config = {
-            "proxy": proxy["proxy"],
-            "username": proxy["username"],
-            "password": proxy["password"]
-        }
-    
+    proxies = [
+        {
+            "proxy": "http://198.23.239.134:6540",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://207.244.217.165:6712",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://107.172.163.27:6543",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://64.137.42.112:5157",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://173.211.0.148:6641",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://161.123.152.115:6360",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://167.160.180.203:6754",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://154.36.110.199:6853",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://173.0.9.70:5653",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+        {
+            "proxy": "http://173.0.9.209:5792",
+            "username": "tmwyubph",
+            "password": "7esnvu6mjsvz",
+        },
+    ]
+    proxy = choice(proxies)
+    proxy_config = {
+        "proxy": proxy["proxy"],
+        "username": proxy["username"],
+        "password": proxy["password"],
+    }
+
     try:
         async with AsyncWebCrawler() as crawler:
             page = await crawler.arun(
-                url=url, 
-                headers=headers, 
+                url=url,
+                headers=headers,
                 proxy=proxy_config,  # 添加代理配置
                 page_timeout=timeout,
-                wait_until='networkidle',
-                wait_time=5000
+                wait_until="networkidle",
+                wait_time=5000,
             )
             if not page:
                 raise Exception("page is null")
@@ -120,7 +166,7 @@ async def monitor_announcement():
     for a in announcements:
         url_hash = url_to_hash(a["href"])
         if url_hash not in announcement_set:
-            date_obj = datetime.strptime(a["time"], '%Y-%m-%d').date()
+            date_obj = datetime.strptime(a["time"], "%Y-%m-%d").date()
             await Announcement.create(
                 title=a["text"],
                 url=a["href"],
