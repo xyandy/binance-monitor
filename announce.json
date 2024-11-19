@@ -1,0 +1,57 @@
+{
+  "code": "000000",
+  "message": null,
+  "messageDetail": null,
+  "data": {
+    "catalogs": [
+      {
+        "catalogId": 48,
+        "parentCatalogId": null,
+        "icon": "https://public.bnbstatic.com/image/cms/content/body/202202/9252ba30f961b1a20d49e622a0ecfad5.png",
+        "catalogName": "New Cryptocurrency Listing",
+        "description": null,
+        "catalogType": 1,
+        "total": 1591,
+        "articles": [
+          {
+            "id": 217727,
+            "code": "67e7da69b8e541c1bfacac7f43f75d78",
+            "title": "Notice on New Trading Pairs & Trading Bots Services on Binance Spot - 2024-11-20",
+            "type": 1,
+            "releaseDate": 1732006802967
+          },
+          {
+            "id": 217630,
+            "code": "f6577bdd30d542e0af4f76a14dfeb241",
+            "title": "Binance Futures Will Launch USDⓈ-Margined BANUSDT and AKTUSDT Perpetual Contracts With up to 75x Leverage",
+            "type": 1,
+            "releaseDate": 1731922212272
+          },
+          {
+            "id": 217573,
+            "code": "8061c9b481244c88be73a68980db5761",
+            "title": "Binance Margin Adds New USDC Pairs - 2024-11-18",
+            "type": 1,
+            "releaseDate": 1731906001533
+          },
+          {
+            "id": 217499,
+            "code": "e25f171ca86342e9b7c160cc1697a090",
+            "title": "Binance Futures Will Launch USDⓈ-Margined DEGENUSDT Perpetual Contract With up to 75x Leverage",
+            "type": 1,
+            "releaseDate": 1731663013144
+          },
+          {
+            "id": 217413,
+            "code": "b50b0a2d80024a8b8765af2eb8560cd0",
+            "title": "Notice on New Trading Pairs & Trading Bots Services on Binance Spot - 2024-11-15",
+            "type": 1,
+            "releaseDate": 1731574815563
+          }
+        ],
+        "catalogs": []
+      }
+    ]
+  },
+  "success": true
+}

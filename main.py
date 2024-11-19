@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     scheduler.add_job(
         monitor_exchange_api,
         "interval",
-        minutes=2,
+        minutes=1,
         max_instances=1,
         coalesce=True,
         next_run_time=datetime.now(),
@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
     scheduler.add_job(
         monitor_announcement,
         "interval",
-        minutes=2,
+        minutes=1,
         max_instances=1,
         coalesce=True,
         next_run_time=datetime.now(),
@@ -86,7 +86,7 @@ async def get_tokens() -> List[str]:
 
 @app.get("/announcements")
 async def get_announcements():
-    announcements = await Announcement.all().order_by("-time")
+    announcements = await Announcement.all().order_by("-release_date")
     return [a.to_dict() for a in announcements]
 
 

@@ -31,4 +31,6 @@ EMIAL_CONFIG = {
 }
 
 EXCHANGE_API_URL = "https://api.binance.com/api/v3/exchangeInfo"
-ANNOUNCEMENT_URL = "https://www.binance.com/en/support/announcement/new-cryptocurrency-listing?c=48&navId=48"
+ANNOUNCEMENT_API_URL = "https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&catalogId=48&pageNo=1&pageSize=5"
+
+# ANNOUNCEMENT_URL = "https://www.binance.com/en/support/announcement/new-cryptocurrency-listing?c=48&navId=48"
